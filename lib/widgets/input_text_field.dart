@@ -32,13 +32,13 @@ class InputTextField extends StatelessWidget {
           ]),
       child: TextField(
         autocorrect: true,
-        obscureText: true,
+        obscureText: textObscure,
         controller: textController,
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
-          prefixIcon: icon,
           focusedBorder: InputBorder.none,
           border: InputBorder.none,
+          prefixIcon: icon,
           hintText: hintText,
         ),
       ),
