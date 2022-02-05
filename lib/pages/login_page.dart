@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/app_logo.dart';
-import 'package:chat/widgets/form_authentication.dart';
+import 'package:chat/widgets/input_text_field.dart';
 import 'package:chat/widgets/footer_authentication.dart';
 
 class LoginPage extends StatelessWidget {
@@ -16,9 +16,7 @@ class LoginPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           const AppLogo(),
-          const FormAuthentication(
-            actionText: "Login",
-          ),
+          const _FormLogin(),
           const FooterAuthentication(
             textOption: 'Create one',
             textQuestion: "You don't have an account ?",
@@ -33,5 +31,44 @@ class LoginPage extends StatelessWidget {
         ],
       )),
     );
+  }
+}
+
+class _FormLogin extends StatefulWidget {
+  const _FormLogin({Key? key}) : super(key: key);
+
+  @override
+  State<_FormLogin> createState() => _FormLoginState();
+}
+
+class _FormLoginState extends State<_FormLogin> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.only(top: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          children: [
+            InputTextField(
+                icon: const Icon(Icons.email_outlined),
+                hintText: 'Email',
+                keyboardType: TextInputType.emailAddress,
+                textController: emailController),
+            InputTextField(
+              icon: const Icon(Icons.lock_outline),
+              hintText: 'Password',
+              keyboardType: TextInputType.visiblePassword,
+              textObscure: true,
+              textController: passwordController,
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text("Login"),
+            )
+          ],
+        ));
   }
 }
