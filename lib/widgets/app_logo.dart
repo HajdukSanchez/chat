@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppLogo extends StatelessWidget {
-  const AppLogo({Key? key}) : super(key: key);
+  final String title;
+
+  const AppLogo({Key? key, this.title = "Messenger"}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,12 +12,12 @@ class AppLogo extends StatelessWidget {
       margin: const EdgeInsets.only(top: 50),
       width: 170,
       child: Column(
-        children: const [
-          Image(image: AssetImage("assets/images/tag-logo.png")),
-          SizedBox(height: 20),
+        children: [
+          const Image(image: AssetImage("assets/images/tag-logo.png")),
+          const SizedBox(height: 20),
           Text(
-            "Messenger",
-            style: TextStyle(fontSize: 30),
+            title,
+            style: const TextStyle(fontSize: 30),
           ),
         ],
       ),

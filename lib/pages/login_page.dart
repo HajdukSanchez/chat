@@ -1,9 +1,10 @@
-import 'package:chat/widgets/button.dart';
+import 'package:chat/enums/routes.enum.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/app_logo.dart';
+import 'package:chat/widgets/button.dart';
+import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/input_text_field.dart';
-import 'package:chat/widgets/footer_authentication.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -23,9 +24,13 @@ class LoginPage extends StatelessWidget {
                   children: <Widget>[
                     const AppLogo(),
                     const _FormLogin(),
-                    const FooterAuthentication(
+                    Labels(
                       textOption: 'Create one',
                       textQuestion: "You don't have an account ?",
+                      onTap: () {
+                        Navigator.pushReplacementNamed(
+                            context, routes.register.name);
+                      },
                     ),
                     Container(
                       padding: const EdgeInsets.only(bottom: 20),

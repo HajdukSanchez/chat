@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-class FooterAuthentication extends StatelessWidget {
+class Labels extends StatelessWidget {
   final String textQuestion;
   final String textOption;
+  final Function() onTap;
 
-  const FooterAuthentication(
-      {Key? key, required this.textQuestion, required this.textOption})
+  const Labels(
+      {Key? key,
+      required this.textQuestion,
+      required this.textOption,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -20,12 +24,15 @@ class FooterAuthentication extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Text(
-          textOption,
-          style: TextStyle(
-              color: Colors.blue[600],
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
+        GestureDetector(
+          onTap: onTap,
+          child: Text(
+            textOption,
+            style: TextStyle(
+                color: Colors.blue[600],
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
         )
       ],
     );
