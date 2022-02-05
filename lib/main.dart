@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:chat/routes/routes.dart';
 import 'package:chat/enums/routes.enum.dart';
 
@@ -9,10 +11,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Dont show debug banner
       title: 'Real Time Chat',
-      initialRoute: routes.loading.name,
+      initialRoute: routes.login.name,
       routes: appRoutes,
     );
   }
