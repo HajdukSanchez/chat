@@ -1,3 +1,4 @@
+import 'package:chat/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/app_logo.dart';
@@ -45,6 +46,11 @@ class _FormLoginState extends State<_FormLogin> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  void onLogin() {
+    print(emailController.text);
+    print(passwordController.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,9 +70,10 @@ class _FormLoginState extends State<_FormLogin> {
               textObscure: true,
               textController: passwordController,
             ),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text("Login"),
+            const SizedBox(height: 15),
+            Button(
+              buttonText: "Login",
+              buttonOnPress: onLogin,
             )
           ],
         ));
