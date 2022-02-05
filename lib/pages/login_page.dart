@@ -13,24 +13,30 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xfff2f2f2),
       body: SafeArea(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          const AppLogo(),
-          const _FormLogin(),
-          const FooterAuthentication(
-            textOption: 'Create one',
-            textQuestion: "You don't have an account ?",
-          ),
-          Container(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: const Text(
-              "Terms and conditions",
-              style: TextStyle(fontWeight: FontWeight.w200),
-            ),
-          )
-        ],
-      )),
+          child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(), // The scroll physics
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.95, // 95% of the screen height
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const AppLogo(),
+                    const _FormLogin(),
+                    const FooterAuthentication(
+                      textOption: 'Create one',
+                      textQuestion: "You don't have an account ?",
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: const Text(
+                        "Terms and conditions",
+                        style: TextStyle(fontWeight: FontWeight.w200),
+                      ),
+                    )
+                  ],
+                ),
+              ))),
     );
   }
 }
