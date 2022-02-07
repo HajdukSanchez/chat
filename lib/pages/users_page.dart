@@ -1,5 +1,8 @@
-import 'package:chat/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'package:chat/models/user.dart';
+import 'package:chat/widgets/user_list_tile.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
@@ -9,11 +12,30 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  final users = [
+  final _users = [
     User(online: true, name: "Jozek", email: "jozekhs@gmail.com", uid: "1"),
     User(online: false, name: "Andres", email: "jozekhs@gmail.com", uid: "2"),
     User(online: true, name: "Fernando", email: "jozekhs@gmail.com", uid: "3"),
+    User(online: false, name: "Juan", email: "jozekhs@gmail.com", uid: "5"),
   ];
+
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  ListView _usersListView() {
+    return ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, i) => UserListTile(user: _users[i]),
+        separatorBuilder: (context, i) => const Divider(),
+        itemCount: _users.length);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +64,14 @@ class _UsersPageState extends State<UsersPage> {
             )
           ],
         ),
-        body: ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, i) => ListTile(
-                  title: Text(users[i].name),
-                  leading: CircleAvatar(
-                    child: Text(users[i].name.substring(0, 2)),
-                  ),
-                  trailing: Container(
-                    height: 10,
-                    width: 10,
-                    decoration: BoxDecoration(
-                        color: users[i].online ? Colors.green : Colors.red[300],
-                        borderRadius: BorderRadius.circular(100)),
-                  ),
-                ),
-            separatorBuilder: (context, i) => const Divider(),
-            itemCount: users.length));
+        body: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          onRefresh: _onRefresh,
+          header: WaterDropHeader(
+              complete: Icon(Icons.check_circle, color: Colors.blue[400]),
+              waterDropColor: Colors.blue),
+          child: _usersListView(),
+        ));
   }
 }
