@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Dont show debug banner
       title: 'Real Time Chat',
-      initialRoute: routes.login.name,
+      initialRoute: routes.users.name,
       routes: appRoutes,
     );
   }
