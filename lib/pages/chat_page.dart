@@ -1,8 +1,14 @@
+import 'package:chat/widgets/input_chat.dart';
 import 'package:flutter/material.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
 
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +41,18 @@ class ChatPage extends StatelessWidget {
                 // We start in the liast child of the list view like a real chat
                 reverse: true,
               )),
-              const Divider(
-                height: 1,
-              ),
-              // TODO: Add Input text field
               Container(
-                color: Colors.white,
-                height: 100,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          blurRadius: 5,
+                          color: Colors.black12,
+                          offset: Offset(0, 5))
+                    ]),
+                child: const InputChat(),
               )
             ],
           ),
