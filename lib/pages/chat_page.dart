@@ -31,31 +31,29 @@ class _ChatPageState extends State<ChatPage> {
           centerTitle: true,
           elevation: 1,
         ),
-        body: Container(
-          child: Column(
-            children: [
-              Flexible(
-                  child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, i) => Text("$i"),
-                // We start in the liast child of the list view like a real chat
-                reverse: true,
-              )),
-              Container(
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                          blurRadius: 5,
-                          color: Colors.black12,
-                          offset: Offset(0, 5))
-                    ]),
-                child: const InputChat(),
-              )
-            ],
-          ),
+        body: Column(
+          children: [
+            Flexible(
+                child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, i) => Text("$i"),
+              // We start in the liast child of the list view like a real chat
+              reverse: true,
+            )),
+            Container(
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                        blurRadius: 5,
+                        color: Colors.black12,
+                        offset: Offset(0, 5))
+                  ]),
+              child: const InputChat(),
+            )
+          ],
         ));
   }
 }

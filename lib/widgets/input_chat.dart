@@ -11,26 +11,42 @@ class InputChat extends StatefulWidget {
 }
 
 class _InputChatState extends State<InputChat> {
-  Widget _renderSendButton() {
-    return Platform.isIOS
-        ? CupertinoButton(onPressed: () {}, child: const Text("Send"))
-        : Container(
-            margin: const EdgeInsets.symmetric(horizontal: 2),
-            child: IconButton(
-                icon: Icon(
-                  Icons.send,
-                  color: Colors.blue[400],
-                ),
-                onPressed: () {}),
-          );
-  }
-
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
+  bool _isButtonEnabled = false;
 
   _handleSubmitted(String text) {
     _textController.clear(); // Clear text field
     _focusNode.requestFocus(); // Mantained the keyboard visible
+    setState(() {
+      _isButtonEnabled = false;
+    });
+  }
+
+  Widget _renderSendButton() {
+    if (Platform.isIOS) {
+      return CupertinoButton(
+          onPressed: _isButtonEnabled
+              ? () => _handleSubmitted(_textController.text.trim())
+              : null,
+          child: const Text("Send"));
+    } else {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 2),
+        child: IconTheme(
+          data: IconThemeData(color: Colors.blue[400]),
+          child: IconButton(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              icon: const Icon(
+                Icons.send,
+              ),
+              onPressed: _isButtonEnabled
+                  ? () => _handleSubmitted(_textController.text.trim())
+                  : null),
+        ),
+      );
+    }
   }
 
   @override
@@ -45,6 +61,13 @@ class _InputChatState extends State<InputChat> {
                   controller: _textController,
                   focusNode: _focusNode, // The add the foucs when we want
                   onSubmitted: _handleSubmitted,
+                  onChanged: (text) {
+                    setState(() {
+                      (text.trim().isNotEmpty)
+                          ? _isButtonEnabled = true
+                          : _isButtonEnabled = false;
+                    });
+                  },
                   decoration:
                       const InputDecoration.collapsed(hintText: "Message"))),
           Container(
