@@ -10,18 +10,8 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final List<ChatMessage> _messages = [];
-
-  void _addMessage(String text) {
-    final ChatMessage message = ChatMessage(
-      message: text,
-      uid: "12812871",
-    );
-    setState(() {
-      _messages.insert(0, message);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,5 +60,30 @@ class _ChatPageState extends State<ChatPage> {
             )
           ],
         ));
+  }
+
+  void _addMessage(String text) {
+    final ChatMessage message = ChatMessage(
+      message: text,
+      uid: "12812871",
+      animationController: AnimationController(
+          vsync:
+              this, // The This only works when we add the TickerProviderStateMixin
+          duration: const Duration(milliseconds: 300)),
+    );
+    setState(() {
+      _messages.insert(0, message);
+      message.animationController.forward(); // Start the animation
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: OFF Socket listening
+    // Clear all the controllers
+    for (ChatMessage message in _messages) {
+      message.animationController.dispose(); // Clear the controller
+    }
+    super.dispose();
   }
 }

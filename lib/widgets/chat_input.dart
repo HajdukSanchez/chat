@@ -17,12 +17,14 @@ class _ChatInputState extends State<ChatInput> {
   bool _isButtonEnabled = false;
 
   _handleSubmitted(String text) {
-    _textController.clear(); // Clear text field
-    _focusNode.requestFocus(); // Mantained the keyboard visible
-    widget.addMessage(text); // Send message to the parent
-    setState(() {
-      _isButtonEnabled = false;
-    });
+    if (text.isNotEmpty) {
+      _textController.clear(); // Clear text field
+      _focusNode.requestFocus(); // Mantained the keyboard visible
+      widget.addMessage(text); // Send message to the parent
+      setState(() {
+        _isButtonEnabled = false;
+      });
+    }
   }
 
   Widget _renderSendButton() {
