@@ -3,14 +3,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class InputChat extends StatefulWidget {
-  const InputChat({Key? key}) : super(key: key);
+class ChatInput extends StatefulWidget {
+  final Function(String) addMessage;
+  const ChatInput({Key? key, required this.addMessage}) : super(key: key);
 
   @override
-  State<InputChat> createState() => _InputChatState();
+  State<ChatInput> createState() => _ChatInputState();
 }
 
-class _InputChatState extends State<InputChat> {
+class _ChatInputState extends State<ChatInput> {
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
   bool _isButtonEnabled = false;
@@ -18,6 +19,7 @@ class _InputChatState extends State<InputChat> {
   _handleSubmitted(String text) {
     _textController.clear(); // Clear text field
     _focusNode.requestFocus(); // Mantained the keyboard visible
+    widget.addMessage(text); // Send message to the parent
     setState(() {
       _isButtonEnabled = false;
     });

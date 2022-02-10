@@ -1,5 +1,7 @@
-import 'package:chat/widgets/input_chat.dart';
 import 'package:flutter/material.dart';
+
+import 'package:chat/widgets/chat_input.dart';
+import 'package:chat/widgets/chat_message.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -9,6 +11,18 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final List<ChatMessage> _messages = [];
+
+  void _addMessage(String text) {
+    final ChatMessage message = ChatMessage(
+      message: text,
+      uid: "12812871",
+    );
+    setState(() {
+      _messages.insert(0, message);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +50,8 @@ class _ChatPageState extends State<ChatPage> {
             Flexible(
                 child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, i) => Text("$i"),
+              itemBuilder: (context, i) => _messages[i],
+              itemCount: _messages.length,
               // We start in the liast child of the list view like a real chat
               reverse: true,
             )),
@@ -51,7 +66,7 @@ class _ChatPageState extends State<ChatPage> {
                         color: Colors.black12,
                         offset: Offset(0, 5))
                   ]),
-              child: const InputChat(),
+              child: ChatInput(addMessage: _addMessage),
             )
           ],
         ));
