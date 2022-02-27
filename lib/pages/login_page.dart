@@ -1,10 +1,12 @@
 import 'package:chat/enums/routes.enum.dart';
+import 'package:chat/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/app_logo.dart';
 import 'package:chat/widgets/button.dart';
 import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/input_text_field.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -58,8 +60,9 @@ class _FormLoginState extends State<_FormLogin> {
   final passwordController = TextEditingController();
 
   void onLogin() {
-    print(emailController.text);
-    print(passwordController.text);
+    // With the listen in true, the providers is going to re-build the widget
+    final authService = Provider.of<AuthService>(context, listen: false);
+    authService.login(emailController.text, passwordController.text);
   }
 
   @override
