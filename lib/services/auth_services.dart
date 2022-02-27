@@ -7,8 +7,18 @@ import 'package:http/http.dart' as http;
 
 class AuthService with ChangeNotifier {
   User? user;
+  bool _authenticating = false;
+
+  bool get authenticating => _authenticating;
+
+  set authenticating(bool value) {
+    _authenticating = value;
+    notifyListeners(); // Notify all the listeners for re-rendering
+  }
 
   Future login(String email, String password) async {
+    authenticating = true;
+
     final dto = {
       'email': email,
       'password': password

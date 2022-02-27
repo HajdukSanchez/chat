@@ -59,14 +59,16 @@ class _FormLoginState extends State<_FormLogin> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void onLogin() {
-    // With the listen in true, the providers is going to re-build the widget
-    final authService = Provider.of<AuthService>(context, listen: false);
-    authService.login(emailController.text, passwordController.text);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
+    void onLogin() {
+      FocusScope.of(context).unfocus(); // Unfocus the keyboard
+      authService.login(
+          emailController.text.trim(), passwordController.text.trim());
+    }
+
     return Container(
         margin: const EdgeInsets.only(top: 40),
         padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -87,7 +89,7 @@ class _FormLoginState extends State<_FormLogin> {
             const SizedBox(height: 15),
             Button(
               buttonText: "Login",
-              buttonOnPress: onLogin,
+              buttonOnPress: authService.authenticating ? () {} : onLogin,
             )
           ],
         ));
