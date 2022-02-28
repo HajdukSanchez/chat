@@ -16,7 +16,7 @@ class AuthService with ChangeNotifier {
     notifyListeners(); // Notify all the listeners for re-rendering
   }
 
-  Future login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     authenticating = true;
 
     final dto = {
@@ -27,9 +27,13 @@ class AuthService with ChangeNotifier {
     final http.Response response = await http.post(url,
         body: jsonEncode(dto), headers: {'content-type': 'application/json'});
 
+    authenticating = false;
     if (response.statusCode == 200) {
       final loginResponse = loginResponseFromJson(response.body);
       this.user = loginResponse.user;
+      return loginResponse.ok; // TRUE
+    } else {
+      return false;
     }
   }
 }

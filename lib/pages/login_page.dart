@@ -1,12 +1,15 @@
+import 'package:chat/helpers/show_message.dart';
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:chat/enums/routes.enum.dart';
 import 'package:chat/services/auth_services.dart';
-import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/app_logo.dart';
 import 'package:chat/widgets/button.dart';
 import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/input_text_field.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -63,10 +66,16 @@ class _FormLoginState extends State<_FormLogin> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
 
-    void onLogin() {
+    void onLogin() async {
       FocusScope.of(context).unfocus(); // Unfocus the keyboard
-      authService.login(
+      final login = await authService.login(
           emailController.text.trim(), passwordController.text.trim());
+      if (login) {
+        // TODO: Add navigation to home page
+      } else {
+        // Show error message
+        showAlertDialog(context, "Erro Login", "Bad credentials");
+      }
     }
 
     return Container(
