@@ -1,10 +1,13 @@
 import 'package:chat/enums/routes.enum.dart';
+import 'package:chat/helpers/show_message.dart';
+import 'package:chat/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/app_logo.dart';
 import 'package:chat/widgets/button.dart';
 import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/input_text_field.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -60,13 +63,23 @@ class _FormRegisterState extends State<_FormRegister> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void onRegister() {
-    print(emailController.text);
-    print(passwordController.text);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
+    void onRegister() async {
+      FocusScope.of(context).unfocus(); // Unfocus the keyboard
+      final register = await authService.register(emailController.text.trim(),
+          nameController.text.trim(), passwordController.text.trim());
+      if (register == true) {
+        Navigator.pushReplacementNamed(
+            context, routes.users.name); // Go to home
+      } else {
+        // Show error message
+        showAlertDialog(context, "Error in register", register);
+      }
+    }
+
     return Container(
         margin: const EdgeInsets.only(top: 40),
         padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -91,7 +104,7 @@ class _FormRegisterState extends State<_FormRegister> {
             ),
             const SizedBox(height: 15),
             Button(
-              buttonText: "Register",
+              buttonText: "Create account",
               buttonOnPress: onRegister,
             )
           ],

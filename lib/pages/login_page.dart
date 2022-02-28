@@ -75,7 +75,7 @@ class _FormLoginState extends State<_FormLogin> {
             context, routes.users.name); // Go to home
       } else {
         // Show error message
-        showAlertDialog(context, "Erro Login", "Bad credentials");
+        showAlertDialog(context, "Error Login", "Bad credentials");
       }
     }
 

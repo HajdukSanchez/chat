@@ -51,9 +51,27 @@ class AuthService with ChangeNotifier {
       user = loginResponse.user;
       await _saveSessionToken(loginResponse.token); // Save the token
       return loginResponse.ok; // TRUE
-    } else {
-      return false;
     }
+    return false;
+  }
+
+  Future register(String email, String name, String password) async {
+    authenticating = true;
+
+    final dto = {'email': email, 'name': name, 'password': password};
+    Uri url = Uri.parse('${Environment.API_URL}/login/new');
+    final http.Response response = await http.post(url,
+        body: jsonEncode(dto), headers: {'content-type': 'application/json'});
+
+    authenticating = false;
+    if (response.statusCode == 200) {
+      final registerResponse = loginResponseFromJson(response.body);
+      user = registerResponse.user;
+      await _saveSessionToken(registerResponse.token);
+      return registerResponse.ok;
+    }
+    final registerResponse = jsonDecode(response.body);
+    return registerResponse["message"]; // We can send a message or a bool
   }
 
   Future _saveSessionToken(String token) async {
