@@ -71,7 +71,8 @@ class _FormLoginState extends State<_FormLogin> {
       final login = await authService.login(
           emailController.text.trim(), passwordController.text.trim());
       if (login) {
-        // TODO: Add navigation to home page
+        Navigator.pushReplacementNamed(
+            context, routes.users.name); // Go to home
       } else {
         // Show error message
         showAlertDialog(context, "Erro Login", "Bad credentials");
