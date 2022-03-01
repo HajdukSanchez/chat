@@ -1,4 +1,7 @@
+import 'package:chat/enums/routes.enum.dart';
+import 'package:chat/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:chat/models/user.dart';
@@ -39,17 +42,26 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final user = authService.user;
+
+    onLogOut() {
+      AuthService.deleteToken();
+      Navigator.pushReplacementNamed(context, routes.login.name);
+    }
+
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "My name",
-            style: TextStyle(color: Colors.black54),
+          centerTitle: true,
+          title: Text(
+            user != null ? user.name : "",
+            style: const TextStyle(color: Colors.black54),
           ),
           elevation: 1,
           backgroundColor: Colors.white,
           // For example we can add an icon to close session
           leading: IconButton(
-              onPressed: () {},
+              onPressed: onLogOut,
               icon: const Icon(
                 Icons.exit_to_app,
                 color: Colors.black54,
@@ -59,7 +71,7 @@ class _UsersPageState extends State<UsersPage> {
               margin: const EdgeInsets.only(right: 20),
               child: Icon(
                 Icons.check_circle,
-                color: Colors.blue[400],
+                color: user!.online ? Colors.blue[400] : Colors.red[400],
               ),
             )
           ],
