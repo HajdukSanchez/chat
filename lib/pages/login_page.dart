@@ -1,4 +1,5 @@
 import 'package:chat/helpers/show_message.dart';
+import 'package:chat/services/socket_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -65,12 +66,14 @@ class _FormLoginState extends State<_FormLogin> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     void onLogin() async {
       FocusScope.of(context).unfocus(); // Unfocus the keyboard
       final login = await authService.login(
           emailController.text.trim(), passwordController.text.trim());
       if (login) {
+        socketService.connect();
         Navigator.pushReplacementNamed(
             context, routes.users.name); // Go to home
       } else {

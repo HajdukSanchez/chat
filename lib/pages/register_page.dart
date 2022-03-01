@@ -1,13 +1,15 @@
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
+import 'package:chat/widgets/button.dart';
+import 'package:chat/widgets/labels.dart';
+import 'package:chat/widgets/app_logo.dart';
 import 'package:chat/enums/routes.enum.dart';
 import 'package:chat/helpers/show_message.dart';
 import 'package:chat/services/auth_services.dart';
-import 'package:flutter/material.dart';
-
-import 'package:chat/widgets/app_logo.dart';
-import 'package:chat/widgets/button.dart';
-import 'package:chat/widgets/labels.dart';
+import 'package:chat/services/socket_service.dart';
 import 'package:chat/widgets/input_text_field.dart';
-import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -66,12 +68,14 @@ class _FormRegisterState extends State<_FormRegister> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     void onRegister() async {
       FocusScope.of(context).unfocus(); // Unfocus the keyboard
       final register = await authService.register(emailController.text.trim(),
           nameController.text.trim(), passwordController.text.trim());
       if (register == true) {
+        socketService.connect();
         Navigator.pushReplacementNamed(
             context, routes.users.name); // Go to home
       } else {

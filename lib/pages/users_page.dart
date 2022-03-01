@@ -1,11 +1,14 @@
-import 'package:chat/enums/routes.enum.dart';
-import 'package:chat/services/auth_services.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:chat/models/user.dart';
 import 'package:chat/widgets/user_list_tile.dart';
+import 'package:chat/models/user.dart';
+import 'package:chat/enums/socket.enum.dart';
+import 'package:chat/enums/routes.enum.dart';
+import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/socket_service.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
@@ -43,11 +46,13 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
     final user = authService.user;
 
     onLogOut() {
-      AuthService.deleteToken();
+      socketService.disconnect();
       Navigator.pushReplacementNamed(context, routes.login.name);
+      AuthService.deleteToken();
     }
 
     return Scaffold(
@@ -69,10 +74,9 @@ class _UsersPageState extends State<UsersPage> {
           actions: [
             Container(
               margin: const EdgeInsets.only(right: 20),
-              child: Icon(
-                Icons.check_circle,
-                color: user!.online ? Colors.blue[400] : Colors.red[400],
-              ),
+              child: socketService.serverStatus == ServerStatus.online
+                  ? Icon(Icons.check_circle, color: Colors.blue[400])
+                  : Icon(Icons.offline_bolt_rounded, color: Colors.red[400]),
             )
           ],
         ),
