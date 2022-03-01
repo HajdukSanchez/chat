@@ -1,13 +1,14 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'package:chat/enums/authentication.enum.dart';
+import 'package:chat/models/user.dart';
 import 'package:chat/global/environment.dart';
 import 'package:chat/models/login_response.dart';
-import 'package:chat/models/user.dart';
+import 'package:chat/enums/authentication.enum.dart';
 
 class AuthService with ChangeNotifier {
   User? user;
@@ -72,6 +73,24 @@ class AuthService with ChangeNotifier {
     }
     final registerResponse = jsonDecode(response.body);
     return registerResponse["message"]; // We can send a message or a bool
+  }
+
+  Future<bool> isLoggedIn() async {
+    final token = await _storage.read(key: auth.token.name);
+
+    Uri url = Uri.parse('${Environment.API_URL}/login/renovate');
+
+    final http.Response response = await http.get(url,
+        headers: {'contentType': 'application/json', 'x-token': '$token'});
+
+    if (response.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(response.body);
+      user = loginResponse.user;
+      await _saveSessionToken(loginResponse.token); // Save the token renovated
+      return true;
+    }
+    logOut();
+    return false;
   }
 
   Future _saveSessionToken(String token) async {
