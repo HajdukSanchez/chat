@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:chat/global/environment.dart';
 import 'package:chat/models/user.dart';
-import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/auth_service.dart';
 
 class UsersService {
   Future<List<User>> getUsers() async {

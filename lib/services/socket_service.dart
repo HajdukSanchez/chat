@@ -1,6 +1,6 @@
 import 'package:chat/enums/socket.enum.dart';
 import 'package:chat/global/environment.dart';
-import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;

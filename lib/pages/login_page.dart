@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:chat/enums/routes.enum.dart';
-import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/auth_service.dart';
 
 import 'package:chat/widgets/app_logo.dart';
 import 'package:chat/widgets/button.dart';

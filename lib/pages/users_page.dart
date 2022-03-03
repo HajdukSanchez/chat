@@ -4,14 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:chat/widgets/user_list_tile.dart';
-
 import 'package:chat/models/user.dart';
-
 import 'package:chat/enums/socket.enum.dart';
 import 'package:chat/enums/routes.enum.dart';
-
 import 'package:chat/services/users_service.dart';
-import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/auth_service.dart';
 import 'package:chat/services/socket_service.dart';
 
 class UsersPage extends StatefulWidget {

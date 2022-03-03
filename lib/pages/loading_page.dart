@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:chat/pages/login_page.dart';
 import 'package:chat/pages/users_page.dart';
-import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/auth_service.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({Key? key}) : super(key: key);

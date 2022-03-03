@@ -7,7 +7,7 @@ import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/app_logo.dart';
 import 'package:chat/enums/routes.enum.dart';
 import 'package:chat/helpers/show_message.dart';
-import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/auth_service.dart';
 import 'package:chat/services/socket_service.dart';
 import 'package:chat/widgets/input_text_field.dart';
 
