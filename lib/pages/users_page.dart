@@ -4,9 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:chat/widgets/user_list_tile.dart';
+
 import 'package:chat/models/user.dart';
+
 import 'package:chat/enums/socket.enum.dart';
 import 'package:chat/enums/routes.enum.dart';
+
+import 'package:chat/services/users_service.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/socket_service.dart';
 
@@ -18,29 +22,15 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  final _users = [
-    User(online: true, name: "Jozek", email: "jozekhs@gmail.com", uid: "1"),
-    User(online: false, name: "Andres", email: "jozekhs@gmail.com", uid: "2"),
-    User(online: true, name: "Fernando", email: "jozekhs@gmail.com", uid: "3"),
-    User(online: false, name: "Juan", email: "jozekhs@gmail.com", uid: "5"),
-  ];
-
+  final usersService = UsersService();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  List<User> users = [];
 
-  void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
-  }
-
-  ListView _usersListView() {
-    return ListView.separated(
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, i) => UserListTile(user: _users[i]),
-        separatorBuilder: (context, i) => const Divider(),
-        itemCount: _users.length);
+  @override
+  void initState() {
+    loadUsers();
+    super.initState();
   }
 
   @override
@@ -83,11 +73,25 @@ class _UsersPageState extends State<UsersPage> {
         body: SmartRefresher(
           controller: _refreshController,
           enablePullDown: true,
-          onRefresh: _onRefresh,
+          onRefresh: loadUsers,
           header: WaterDropHeader(
               complete: Icon(Icons.check_circle, color: Colors.blue[400]),
               waterDropColor: Colors.blue),
           child: _usersListView(),
         ));
+  }
+
+  void loadUsers() async {
+    users = await usersService.getUsers();
+    setState(() {});
+    _refreshController.refreshCompleted();
+  }
+
+  ListView _usersListView() {
+    return ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, i) => UserListTile(user: users[i]),
+        separatorBuilder: (context, i) => const Divider(),
+        itemCount: users.length);
   }
 }
