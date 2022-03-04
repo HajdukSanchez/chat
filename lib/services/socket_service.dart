@@ -1,9 +1,10 @@
-import 'package:chat/enums/socket.enum.dart';
-import 'package:chat/global/environment.dart';
-import 'package:chat/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'package:chat/enums/socket.enum.dart';
+import 'package:chat/global/environment.dart';
+import 'package:chat/services/auth_service.dart';
 
 class SocketService with ChangeNotifier {
   ServerStatus _serverStatus = ServerStatus.connecting;
@@ -27,12 +28,12 @@ class SocketService with ChangeNotifier {
       }
     });
 
-    _socket.on('connect', (_) {
+    _socket.on(SocketEvents.connect.name, (_) {
       _serverStatus = ServerStatus.online;
       notifyListeners();
     });
 
-    _socket.on('disconnect', (_) {
+    _socket.on(SocketEvents.disconnect.name, (_) {
       _serverStatus = ServerStatus.offline;
       notifyListeners();
     });
