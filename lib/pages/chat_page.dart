@@ -30,6 +30,20 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     chatService = Provider.of<ChatService>(context, listen: false);
     socketService = Provider.of<SocketService>(context, listen: false);
     authService = Provider.of<AuthService>(context, listen: false);
+    socketService.socket?.on(SocketEvents.chatMessage.name, _listenMessage);
+  }
+
+  void _listenMessage(dynamic data) {
+    ChatMessage newMessage = ChatMessage(
+        message: data['message'],
+        uid: data['from'],
+        animationController: AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 300)));
+    setState(() {
+      _messages.insert(0, newMessage);
+      newMessage.animationController
+          .forward(); // I need to method to see the message animation
+    });
   }
 
   @override
@@ -90,7 +104,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   void _addMessage(String text) {
     final ChatMessage message = ChatMessage(
       message: text,
-      uid: "123",
+      uid: authService.user != null ? authService.user!.uid : "",
       animationController: AnimationController(
           vsync:
               this, // The This only works when we add the TickerProviderStateMixin
