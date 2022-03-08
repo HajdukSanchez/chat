@@ -35,6 +35,7 @@ class _UsersPageState extends State<UsersPage> {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
     final user = authService.user;
+    FocusScope.of(context).unfocus(); // Unfocus the keyboard
 
     onLogOut() {
       socketService.disconnect();
