@@ -1,4 +1,5 @@
 import 'package:chat/enums/socket.enum.dart';
+import 'package:chat/models/messages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -31,19 +32,17 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     socketService = Provider.of<SocketService>(context, listen: false);
     authService = Provider.of<AuthService>(context, listen: false);
     socketService.socket?.on(SocketEvents.chatMessage.name, _listenMessage);
+    _loadMessages(chatService.userToChat!.uid);
   }
 
-  void _listenMessage(dynamic data) {
-    ChatMessage newMessage = ChatMessage(
-        message: data['message'],
-        uid: data['from'],
-        animationController: AnimationController(
-            vsync: this, duration: const Duration(milliseconds: 300)));
-    setState(() {
-      _messages.insert(0, newMessage);
-      newMessage.animationController
-          .forward(); // I need to method to see the message animation
-    });
+  @override
+  void dispose() {
+    // TODO: OFF Socket listening
+    // Clear all the controllers
+    for (ChatMessage message in _messages) {
+      message.animationController.dispose(); // Clear the controller
+    }
+    super.dispose();
   }
 
   @override
@@ -101,6 +100,34 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         ));
   }
 
+  void _listenMessage(dynamic data) {
+    ChatMessage newMessage = ChatMessage(
+        message: data['message'],
+        uid: data['from'],
+        animationController: AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 300)));
+    setState(() {
+      _messages.insert(0, newMessage);
+      newMessage.animationController
+          .forward(); // I need to method to see the message animation
+    });
+  }
+
+  void _loadMessages(String uid) async {
+    List<Message> chatMessages = await chatService.getChatMessages(uid);
+    // At the final, it is another way to start the animation
+    final chatHistory = chatMessages.map((chat) => ChatMessage(
+        message: chat.message,
+        uid: chat.from,
+        animationController: AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 300))
+          ..forward()));
+    setState(() {
+      _messages.insertAll(
+          0, chatHistory); // Insert all the messages into the messages array
+    });
+  }
+
   void _addMessage(String text) {
     final ChatMessage message = ChatMessage(
       message: text,
@@ -119,15 +146,5 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       'to': chatService.userToChat?.uid,
       'message': text
     });
-  }
-
-  @override
-  void dispose() {
-    // TODO: OFF Socket listening
-    // Clear all the controllers
-    for (ChatMessage message in _messages) {
-      message.animationController.dispose(); // Clear the controller
-    }
-    super.dispose();
   }
 }
